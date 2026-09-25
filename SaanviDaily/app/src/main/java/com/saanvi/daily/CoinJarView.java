@@ -29,13 +29,14 @@ public class CoinJarView extends View {
         super.onDraw(c);
         float w=getWidth(),h=getHeight();
         float l=w*.15f,r=w*.85f,t=h*.16f,b=h*.90f;
-        p.setStyle(Paint.Style.FILL);p.setColor(Color.argb(26,accent>>16&255,accent>>8&255,accent&255));
+        p.setShadowLayer(w*.035f,0,w*.02f,Color.argb(90,accent>>16&255,accent>>8&255,accent&255));
+        p.setStyle(Paint.Style.FILL);p.setColor(Color.argb(48,accent>>16&255,accent>>8&255,accent&255));
         Path jar=new Path();jar.moveTo(l,t);jar.lineTo(r,t);jar.lineTo(r*.96f,b);jar.quadTo(w*.5f,h*.98f,l*1.04f,b);jar.close();c.drawPath(jar,p);
-        p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(Math.max(3,w*.025f));p.setColor(accent);c.drawPath(jar,p);
+        p.setStyle(Paint.Style.STROKE);p.setStrokeWidth(Math.max(3,w*.025f));p.setColor(accent);c.drawPath(jar,p);p.clearShadowLayer();
         p.setStyle(Paint.Style.FILL);p.setColor(accent);c.drawRoundRect(w*.25f,h*.07f,w*.75f,h*.19f,w*.06f,w*.06f,p);
 
         int count=(int)Math.min(18,Math.max(0,Math.round(balance/10.0)));
-        p.setColor(Color.rgb(245,176,65));
+        p.setColor(Color.rgb(251,191,36));
         for(int i=0;i<count;i++){
             int col=i%4,row=i/4;
             float x=l+w*.12f+col*w*.15f;
