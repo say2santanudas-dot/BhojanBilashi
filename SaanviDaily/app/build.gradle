@@ -1,0 +1,19 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.saanvi.daily'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.saanvi.daily'
+        minSdk 24
+        targetSdk 35
+        versionCode 22
+        versionName '2.2-full'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
