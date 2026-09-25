@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - saanvi-daily-build-v21-20260925
-    paths:
-      - 'SaanviDaily/**'
-      - '.github/workflows/saanvi-android.yml'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
