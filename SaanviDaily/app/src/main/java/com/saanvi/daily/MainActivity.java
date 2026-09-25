@@ -40,23 +40,23 @@ public class MainActivity extends Activity {
     private LinearLayout root;
     private boolean parentUnlocked=false;
 
-    private final int BG=Color.rgb(247,248,252), TEXT=Color.rgb(38,50,56), MUTED=Color.rgb(120,133,140);
-    private final int PURPLE=Color.rgb(114,88,232), PURPLE_SOFT=Color.rgb(239,235,255);
-    private final int GOLD=Color.rgb(245,176,65), GREEN=Color.rgb(24,169,104), RED=Color.rgb(230,73,79);
-    private final int BLUE=Color.rgb(60,126,245), PINK=Color.rgb(236,102,151);
+    private final int BG=Color.rgb(10,15,29), TEXT=Color.rgb(246,248,252), MUTED=Color.rgb(157,170,192);
+    private final int CARD=Color.rgb(23,31,52), CARD2=Color.rgb(29,38,64), LINE=Color.rgb(53,65,101);
+    private final int PURPLE=Color.rgb(139,92,246), PURPLE_SOFT=Color.rgb(52,42,86);
+    private final int GOLD=Color.rgb(251,191,36), GREEN=Color.rgb(52,211,153), RED=Color.rgb(248,113,113);
+    private final int BLUE=Color.rgb(56,189,248), PINK=Color.rgb(244,114,182);
 
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
         db=new DataStore(this);
         Window w=getWindow();
-        w.setStatusBarColor(BG);w.setNavigationBarColor(Color.WHITE);
-        if(android.os.Build.VERSION.SDK_INT>=23)w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        if(android.os.Build.VERSION.SDK_INT>=26)w.getDecorView().setSystemUiVisibility(w.getDecorView().getSystemUiVisibility()|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        w.setStatusBarColor(BG);w.setNavigationBarColor(BG);
+        w.getDecorView().setSystemUiVisibility(0);
         showSplash();
     }
 
     private void showSplash(){
-        FrameLayout f=new FrameLayout(this);f.setBackgroundColor(Color.WHITE);
+        FrameLayout f=new FrameLayout(this);f.setBackground(gradient(Color.rgb(8,13,28),Color.rgb(43,25,92),GradientDrawable.Orientation.TL_BR));
         LinearLayout c=new LinearLayout(this);c.setOrientation(LinearLayout.VERTICAL);c.setGravity(Gravity.CENTER);
         f.addView(c,new FrameLayout.LayoutParams(-1,-1));
         TextView coin=txt("★",64,true,PURPLE);coin.setGravity(Gravity.CENTER);coin.setBackground(circle(GOLD));
@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
         ScrollView sc=new ScrollView(this);sc.setFillViewport(true);sc.setClipToPadding(false);sc.setBackgroundColor(BG);
         root=new LinearLayout(this);root.setOrientation(LinearLayout.VERTICAL);root.setBackgroundColor(BG);
         root.setPadding(dp(18),dp(20),dp(18),dp(44));
+        root.setBackground(gradient(Color.rgb(9,14,28),Color.rgb(18,26,48),GradientDrawable.Orientation.TOP_BOTTOM));
         sc.addView(root,new ScrollView.LayoutParams(-1,-2));setContentView(sc);
 
         sc.setOnApplyWindowInsetsListener((v,insets)->{
@@ -95,18 +96,19 @@ public class MainActivity extends Activity {
     }
     private LinearLayout card(){
         LinearLayout c=new LinearLayout(this);c.setOrientation(LinearLayout.VERTICAL);c.setPadding(dp(17),dp(15),dp(17),dp(15));
-        c.setBackground(round(Color.WHITE,20));c.setElevation(dp(2));
+        c.setBackground(border(CARD,LINE,22));c.setElevation(0);
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.setMargins(0,dp(7),0,dp(7));c.setLayoutParams(lp);return c;
     }
     private View section(String title,String sub){
         LinearLayout x=new LinearLayout(this);x.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.setMargins(0,dp(17),0,dp(3));x.setLayoutParams(lp);
-        x.addView(txt(title,21,true));x.addView(txt(sub,13,false,MUTED));return x;
+        x.addView(txt(title,21,true,PURPLE));x.addView(txt(sub,13,false,MUTED));return x;
     }
     private Space gap(int h){Space s=new Space(this);s.setLayoutParams(new LinearLayout.LayoutParams(1,dp(h)));return s;}
     private GradientDrawable round(int color,float radius){GradientDrawable g=new GradientDrawable();g.setColor(color);g.setCornerRadius(dp(radius));return g;}
     private GradientDrawable border(int fill,int stroke,float radius){GradientDrawable g=round(fill,radius);g.setStroke(dp(1),stroke);return g;}
     private GradientDrawable circle(int color){GradientDrawable g=new GradientDrawable();g.setShape(GradientDrawable.OVAL);g.setColor(color);return g;}
+    private GradientDrawable gradient(int a,int b,GradientDrawable.Orientation o){GradientDrawable g=new GradientDrawable(o,new int[]{a,b});g.setCornerRadius(dp(24));return g;}
     private int dp(float n){return (int)(n*getResources().getDisplayMetrics().density+.5f);}
     private String money(double v){return Math.abs(v-Math.rint(v))<.005?String.format(Locale.US,"%.0f",v):String.format(Locale.US,"%.2f",v);}
     private void toast(String s){Toast.makeText(this,s,Toast.LENGTH_SHORT).show();}
@@ -118,7 +120,7 @@ public class MainActivity extends Activity {
         root.addView(txt(new SimpleDateFormat("EEEE, dd MMMM",Locale.US).format(new Date()),14,false,MUTED));
 
         int[] p=db.progress();int total=p[0],done=p[1];int pct=total==0?0:(int)Math.round(done*100.0/total);
-        LinearLayout prog=card();LinearLayout line=new LinearLayout(this);line.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout prog=card();prog.setBackground(gradient(Color.rgb(77,47,153),Color.rgb(24,91,157),GradientDrawable.Orientation.LEFT_RIGHT));LinearLayout line=new LinearLayout(this);line.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout left=new LinearLayout(this);left.setOrientation(LinearLayout.VERTICAL);left.addView(txt("TODAY'S PROGRESS",12,true,MUTED));left.addView(txt(done+" / "+total+" tasks completed",20,true));
         line.addView(left,new LinearLayout.LayoutParams(0,-2,1));TextView badge=txt(pct+"%",16,true,PURPLE);badge.setGravity(Gravity.CENTER);badge.setBackground(round(PURPLE_SOFT,18));line.addView(badge,new LinearLayout.LayoutParams(dp(66),dp(40)));prog.addView(line);
         ProgressBar bar=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);bar.setMax(100);bar.setProgress(pct);bar.setProgressTintList(ColorStateList.valueOf(PURPLE));
@@ -161,7 +163,7 @@ public class MainActivity extends Activity {
         root.addView(row);
     }
     private View walletMini(String title,double amount,int accent){
-        LinearLayout c=new LinearLayout(this);c.setOrientation(LinearLayout.VERTICAL);c.setGravity(Gravity.CENTER);c.setPadding(dp(6),dp(10),dp(6),dp(10));
+        LinearLayout c=new LinearLayout(this);c.setOrientation(LinearLayout.VERTICAL);c.setGravity(Gravity.CENTER);c.setPadding(dp(6),dp(12),dp(6),dp(12));c.setBackground(border(CARD2,accent,20));
         CoinJarView jar=new CoinJarView(this);jar.setAccent(accent);jar.setBalance(amount);c.addView(jar,new LinearLayout.LayoutParams(dp(86),dp(102)));
         TextView t=txt(title,11,true,accent);t.setGravity(Gravity.CENTER);c.addView(t);TextView a=txt("🪙 "+money(amount),15,true);a.setGravity(Gravity.CENTER);c.addView(a);return c;
     }
